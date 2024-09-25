@@ -1,115 +1,68 @@
+import React, { useState } from 'react';
 import Image from "next/image";
-import localFont from "next/font/local";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Rocket from "@/public/assets/rocket.png";
+import TaskList from '@/src/component/TaskList';
 
 export default function Home() {
+  const [taskInput, setTaskInput] = useState(''); // 입력 필드 상태 관리
+  const [tasks, setTasks] = useState([
+    // 초기 할 일 목록
+    { id: 1, title: "Meeting With Tae Hyeong & Jun Seo", completed: false },
+    { id: 2, title: "Education for Dae Hong Ham", completed: false },
+    { id: 3, title: "Let's Go Gazilab~~", completed: false },
+    { id: 4, title: "I had a meeting about naver's MOU", completed: true },
+    { id: 5, title: "I had a birthday party for APM's Bro", completed: true }
+  ]);
+
+  const handleAddTask = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (taskInput.trim() === '') return; // 빈 입력 방지
+    const newTask = {
+      id: Date.now(),
+      title: taskInput,
+      completed: false,
+    };
+    setTasks([...tasks, newTask]); // 새로운 할 일 추가
+    setTaskInput(''); // 입력 필드 초기화
+  };
+
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+      className="min-h-screen flex flex-col items-center"
+      style={{
+        background: "linear-gradient(to bottom, #0d0d0d 200px, #1a1a1a 0)",
+        height: "1024px",
+      }}
     >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Header Section */}
+      <div className="flex items-center gap-[12px]" style={{ marginTop: "72px" }}>
+        <div className="h-[36px] w-[22px]">
+          <Image src={Rocket} alt="This is Rocket Image" width={22} height={36} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="font-[Inter] font-black text-[40px] flex items-center">
+          <span style={{ color: "#4EA8DE" }}>To</span>
+          <span style={{ color: "#5E60CE", marginLeft: "12px" }}>Do</span>
+        </div>
+      </div>
+
+      {/* Task Input Section */}
+      <form className="flex z-10 flex-wrap gap-2 items-center mt-10 max-w-full leading-snug w-[736px]" onSubmit={handleAddTask}>
+        <label htmlFor="taskInput" className="sr-only">Enter about your tasks</label>
+        <input
+          id="taskInput"
+          type="text"
+          placeholder="enter about your tasks: TODO"
+          value={taskInput}
+          onChange={(e) => setTaskInput(e.target.value)} // 입력 필드 상태 업데이트
+          className="flex-1 shrink gap-2 self-stretch p-4 my-auto text-base rounded-lg border border-solid bg-neutral-800 border-stone-950 min-w-[240px] text-zinc-500 max-md:max-w-full"
+        />
+        <button type="submit" className="flex gap-2 justify-center items-center self-stretch p-4 my-auto text-sm font-bold whitespace-nowrap bg-cyan-700 rounded-lg text-zinc-100">
+          <span className="self-stretch my-auto">Create</span>
+        </button>
+      </form>
+
+      {/* Task List Section */}
+      <TaskList tasks={tasks} setTasks={setTasks} /> {/* TaskList 컴포넌트에 상태 전달 */}
     </div>
   );
 }
